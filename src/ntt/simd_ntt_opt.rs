@@ -3,7 +3,9 @@
 use super::traits::NTT;
 use crate::modular::{barrett_reduce, mod_add, mod_mul, mod_sub};
 use crate::params::{N, Q, ZETAS};
-use crate::simd_ops_opt::{simd_barrett_reduce_8, simd_mod_add_8, simd_mod_mul_8, simd_mod_sub_8};
+use crate::simd_ops_opt::{
+    simd_barrett_reduce_8_register_opt, simd_mod_add_8, simd_mod_mul_8, simd_mod_sub_8,
+};
 
 pub struct SimdNttOpt {
     twiddles: Vec<i32>,
@@ -119,9 +121,8 @@ impl SimdNttOpt {
                         a[j + len + 7],
                     ];
                     let zeta_vec = [zeta; 8];
-
                     let sum = simd_mod_add_8(&a_lower, &a_upper);
-                    let a_new = simd_barrett_reduce_8(&sum);
+                    let a_new = simd_barrett_reduce_8_register_opt(&sum);
 
                     let diff = simd_mod_sub_8(&a_upper, &a_lower);
                     let b_new = simd_mod_mul_8(&diff, &zeta_vec);
