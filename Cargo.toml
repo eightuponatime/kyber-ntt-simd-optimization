@@ -1,0 +1,29 @@
+[package]
+name = "ntt-simd-optimization"
+version = "0.1.0"
+edition = "2024"
+authors = ["maxim"]
+license = "MIT"
+description = "High-performance NTT implementation for CRYSTALS-Kyber using AVX2 and register optimization"
+
+[dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "simd_ops_bench"
+harness = false
+
+[[bench]]
+name = "ntt_bench"
+harness = false
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+[profile.dev]
+opt-level = 0
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "allow"
