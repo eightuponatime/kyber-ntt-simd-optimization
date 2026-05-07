@@ -17,6 +17,10 @@ harness = false
 name = "ntt_bench"
 harness = false
 
+[[bench]]
+name = "llvm_bench"
+harness = false
+
 [profile.release]
 opt-level = 3
 lto = true
